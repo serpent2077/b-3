@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Rock Paper Scissors</title>
+<style>
+  :root {
+    --bg:#2e0153; /* dark purple background */
+    --text:#e0d7f5;
+    --text-dark:#b9a8e6;
+    --primary:#cabbff;
+    --radius:.75rem;
+    --trans:.3s;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  body {
+    margin:0;font-family:'Poppins',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,'Open Sans','Helvetica Neue',sans-serif;
+    background:var(--bg);color:var(--text);line-height:1.6;min-height:100vh;display:flex;justify-content:center;align-items:flex-start;padding:4rem 1.5rem;text-align:center;
+  }
+  main {
+    max-width:600px;width:100%;
+  }
+  h1 {
+    font-size:3.5rem;font-weight:700;color:var(--primary);margin-bottom:.5rem;user-select:none;
+  }
+  p.subtitle {
+    font-size:1.125rem;margin-bottom:2.5rem;user-select:none;color:var(--text-dark);
+  }
+  .choices {
+    display:flex;justify-content:center;gap:1.5rem;margin-bottom:2.5rem;flex-wrap:wrap;
+  }
+  button.choice {
+    background:#3a1570;border:2px solid transparent;padding:1.1rem 1.6rem;font-size:1.25rem;font-weight:600;border-radius:var(--radius);
+    color:var(--primary);cursor:pointer;user-select:none;display:flex;flex-direction:column;align-items:center;width:110px;
+    transition:background-color var(--trans),transform var(--trans),border-color var(--trans);
+  }
+  button.choice:hover,button.choice:focus-visible {
+    border-color:var(--primary);background:#5f3cb5;outline:none;transform:scale(1.05);
+  }
+  button.choice span.icon {
+    font-size:3rem;margin-bottom:.4rem;pointer-events:none;
+  }
+  .result-card {
+    background:#4e2980;border-radius:var(--radius);padding:1.8rem 2rem;box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    color:var(--text);font-size:1.25rem;font-weight:600;user-select:none;min-height:90px;display:flex;align-items:center;justify-content:center;
+    margin-bottom:2rem;transition:background-color 0.3s ease;
+  }
+  .scoreboard {
+    font-size:1rem;color:var(--text-dark);display:flex;justify-content:center;gap:3rem;user-select:none;
+  }
+  .score {
+    display:flex;flex-direction:column;align-items:center;
+  }
+  .score-value {
+    font-weight:700;font-size:1.4rem;color:var(--primary);margin-top:.2rem;
+  }
+  @media (max-width:480px) {
+    h1 { font-size:2.5rem;}
+    button.choice {width:90px;font-size:1rem;padding:1rem 1.2rem;}
+    button.choice span.icon {font-size:2.4rem;}
+    .result-card {font-size:1rem;padding:1.2rem 1.5rem;}
+  }
+</style>
+</head>
+<body>
+  <main>
+    <h1>Rock Paper Scissors</h1>
+    <p class="subtitle">Choose your move</p>
+    <div class="choices" role="group" aria-label="Select your move: rock, paper or scissors">
+      <button class="choice" data-choice="rock" aria-pressed="false" aria-label="Rock"><span class="icon" aria-hidden="true">✊</span>Rock</button>
+      <button class="choice" data-choice="paper" aria-pressed="false" aria-label="Paper"><span class="icon" aria-hidden="true">✋</span>Paper</button>
+      <button class="choice" data-choice="scissors" aria-pressed="false" aria-label="Scissors"><span class="icon" aria-hidden="true">✌️</span>Scissors</button>
+    </div>
+    <div class="result-card" id="result" aria-live="polite" aria-atomic="true">Make your move!</div>
+    <div class="scoreboard" aria-label="Scoreboard">
+      <div class="score" aria-live="polite" aria-atomic="true">Player <span class="score-value" id="player-score">0</span></div>
+      <div class="score" aria-live="polite" aria-atomic="true">Computer <span class="score-value" id="computer-score">0</span></div>
+    </div>
+  </main>
+  <script>
+    (() => {
+      const c=['rock','paper','scissors'],w={rock:'scissors',paper:'rock',scissors:'paper'};
+      let pScore=0,cScore=0;
+      const buttons=document.querySelectorAll('button.choice'),result=document.getElementById('result'),
+            pScoreEl=document.getElementById('player-score'),cScoreEl=document.getElementById('computer-score');
+      function compPlay(){return c[Math.floor(Math.random()*c.length)];}
+      function winner(p,c){if(p===c)return'tie';if(w[p]===c)return'win';return'lose';}
+      function updateAria(s){buttons.forEach(b=>b.setAttribute('aria-pressed',b.dataset.choice===s?'true':'false'));}
+      function play(pChoice){
+        const cChoice=compPlay(),res=winner(pChoice,cChoice);
+        updateAria(pChoice);
+        let msg=`You chose ${pChoice}, computer chose ${cChoice}. `;
+        if(res==='win'){pScore++;msg+='You win! 🎉';}
+        else if(res==='lose'){cScore++;msg+='You lose! 😞';}
+        else msg+="It's a tie! 🤝";
+        pScoreEl.textContent=pScore;cScoreEl.textContent=cScore;result.textContent=msg;
+      }
+      buttons.forEach(b=>{
+        b.addEventListener('click',()=>play(b.dataset.choice));
+        b.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();b.click();}});
+      });
+    })();
+  </script>
+</body>
+</html>
+
