@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Motivational Quotes App</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+      transition: background 1s ease;
+    }
+
+    .container {
+      text-align: center;
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+      max-width: 90%;
+      width: 400px;
+      transition: all 0.3s ease;
+    }
+
+    .quote {
+      font-size: 1.5rem;
+      font-weight: 500;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+    }
+
+    .author {
+      margin-top: 1rem;
+      font-size: 1rem;
+      font-style: italic;
+      color: #555;
+    }
+
+    .fade-out {
+      opacity: 0;
+    }
+
+    button {
+      margin-top: 2rem;
+      padding: 0.75rem 1.5rem;
+      font-size: 1rem;
+      background-color: #ff6f61;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #ff3b2e;
+    }
+
+    @media (max-width: 500px) {
+      .quote {
+        font-size: 1.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="quote" id="quote">Click the button for motivation!</div>
+    <div class="author" id="author"></div>
+    <button onclick="generateQuote()">Inspire Me ✨</button>
+  </div>
+
+  <script>
+    const quotes = [
+      { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" },
+      { text: "I am not lazy, I’m on energy-saving mode.", author: "Anonymous" },
+      { text: "Success is not in what you have, but who you are.", author: "Bo Bennett" },
+      { text: "Be yourself; everyone else is already taken.", author: "Oscar Wilde" },
+      { text: "I'm not arguing, I'm just explaining why I'm right.", author: "Anonymous" },
+      { text: "You miss 100% of the shots you don’t take.", author: "Wayne Gretzky" },
+      { text: "Life is short. Smile while you still have teeth.", author: "Anonymous" },
+      { text: "Don’t watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
+      { text: "If at first you don’t succeed, then skydiving definitely isn’t for you.", author: "Steven Wright" },
+      { text: "Act as if what you do makes a difference. It does.", author: "William James" }
+    ];
+
+    const backgrounds = [
+      "#ff9a9e", "#a18cd1", "#fbc2eb", "#fad0c4", "#84fab0", "#a6c0fe"
+    ];
+
+    function generateQuote() {
+      const quoteElem = document.getElementById('quote');
+      const authorElem = document.getElementById('author');
+
+      // Fade out
+      quoteElem.classList.add('fade-out');
+      authorElem.classList.add('fade-out');
+
+      setTimeout(() => {
+        const random = Math.floor(Math.random() * quotes.length);
+        const newQuote = quotes[random];
+
+        quoteElem.textContent = `"${newQuote.text}"`;
+        authorElem.textContent = `— ${newQuote.author}`;
+
+        // Change background color
+        document.body.style.background = `linear-gradient(135deg, ${randomBackground()} 0%, #ffffff 100%)`;
+
+        // Fade in
+        quoteElem.classList.remove('fade-out');
+        authorElem.classList.remove('fade-out');
+      }, 300);
+    }
+
+    function randomBackground() {
+      return backgrounds[Math.floor(Math.random() * backgrounds.length)];
+    }
+  </script>
+</body>
+</html>
